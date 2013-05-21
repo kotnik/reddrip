@@ -50,7 +50,7 @@ setup(name="reddrip",
     classifiers=[
         "Programming Language :: Python",
         "Development Status :: 4 - Beta",
-        "License :: OSI Approved :: GNU General Public License v3 or later (LGPLv3+)",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Environment :: Console",
         "Topic :: Internet :: WWW/HTTP",
     ],
