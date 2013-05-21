@@ -11,7 +11,7 @@ You will need to have Redis instance ready. Then, the fastest way is to pip it:
 
     pip install reddrip
 
-Pip will download and isntall the dependencies for you.
+Pip will download and install the dependencies for you.
 
 Running
 -------
