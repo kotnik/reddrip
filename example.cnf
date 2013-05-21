@@ -1,0 +1,18 @@
+;
+; Example Reddrip configuration file.
+;
+; Please use this as a starting point, copy it and put your values.
+
+[global]
+; Redis configuration.
+redis.host = localhost
+redis.port = 6379
+redis.db = 0
+; Output directory.
+outdir = ./output
+
+[subreddit:pics]
+type = hot
+
+;[subreddit:wallpapers]
+;type = new
