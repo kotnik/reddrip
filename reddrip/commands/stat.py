@@ -1,6 +1,7 @@
 """ Running statistics.
 """
 
+import os
 import logging
 
 import redis
@@ -61,13 +62,12 @@ class StatCommand(Command):
             "Type",
             "Processed",
             "Saved",
+            "Existing",
             "Size"
         ])
-        table.set_cols_align(["l", "l", "r", "r", "r"])
+        table.set_cols_align(["l", "l", "r", "r", "r", "r"])
 
-        size = 0
-        processed = 0
-        saved = 0
+        size = processed = saved = existing = 0
         for subreddit in subreddits:
             try:
                 dl_type = conf.subreddit(subreddit)["type"]
@@ -79,16 +79,21 @@ class StatCommand(Command):
             )
             sub_saved = redis_conn.get("stat:%s:saved:count" % subreddit)
             sub_size = redis_conn.get("stat:%s:saved:size" % subreddit)
+            sub_existing = len(
+                os.listdir("%s/%s" % (conf.glob["outdir"], subreddit))
+            )
 
             processed += int(sub_processed)
             saved += int(sub_saved)
             size += int(sub_size)
+            existing += sub_existing
 
             table.add_row([
                 subreddit,
                 dl_type,
                 sub_processed,
                 sub_saved,
+                sub_existing,
                 self._human_readable(sub_size)
             ])
 
@@ -97,6 +102,7 @@ class StatCommand(Command):
             "",
             processed,
             saved,
+            existing,
             self._human_readable(size)
         ])
 
