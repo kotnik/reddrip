@@ -39,5 +39,6 @@ class RunCommand(Command):
 
         # Main runner.
         while True:
+            conf.read()
             for subreddit in conf.subreddits():
                 rip.process(subreddit)

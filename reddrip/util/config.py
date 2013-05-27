@@ -10,11 +10,17 @@ class Configuration(object):
         :param config_file: Configuration file path.
         :type config_file: string
         """
-        config = ConfigParser.ConfigParser()
-        config.read(config_file)
-
+        self.config_file = config_file
         self.glob = {}
         self.subs = {}
+
+        self.read()
+
+    def read(self):
+        self.glob = {}
+        self.subs = {}
+        config = ConfigParser.ConfigParser()
+        config.read(self.config_file)
 
         for section in config.sections():
             for item in config.items(section):
