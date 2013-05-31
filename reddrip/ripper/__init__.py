@@ -25,7 +25,7 @@ class Ripper(object):
         self.reddit = praw.Reddit(user_agent=self.agent)
 
     def _clean_title(self, title):
-        return re.sub(r'([^\s\w]|_)+', '', title)[:128]
+        return re.sub(r'([^\s\w]|_)+', '', title)[:128].lower()
 
     def _get_ext(self, url):
         url_info = urlparse.urlparse(url)
