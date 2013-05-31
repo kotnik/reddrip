@@ -25,14 +25,14 @@ with open(os.path.join(root_dir, "README.md")) as f:
     README = f.read()
 
 setup(name="reddrip",
-    version="1.0",
+    version="1.1",
     description="Reddrip is Reddit subreddit picture ripper.",
     long_description=README,
     keywords="reddit crawler",
     author="Nikola Kotur",
     author_email="kotnick+python@gmail.com",
     url="https://github.com/kotnik/reddrip",
-    download_url="https://github.com/kotnik/reddrip/archive/v0.1.tar.gz",
+    download_url="https://github.com/kotnik/reddrip/archive/v1.1.tar.gz",
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
