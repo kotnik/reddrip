@@ -79,9 +79,11 @@ class StatCommand(Command):
             )
             sub_saved = redis_conn.get("stat:%s:saved:count" % subreddit)
             sub_size = redis_conn.get("stat:%s:saved:size" % subreddit)
-            sub_existing = len(
-                os.listdir("%s/%s" % (conf.glob["outdir"], subreddit))
-            )
+            subdir = "%s/%s" % (conf.glob["outdir"], subreddit)
+            sub_existing = len([
+                f for f in os.listdir(subdir)
+                if os.path.isfile("%s/%s" % (subdir, f))
+            ])
 
             processed += int(sub_processed)
             saved += int(sub_saved)
