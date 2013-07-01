@@ -16,7 +16,7 @@ class Ripper(object):
     timeout = 40
     agent = "Reddrip v1.0"
     submission_limit = 50
-    supported_exts = [ "jpg", "png", "gif" ]
+    supported_exts = [ "jpg", "jpeg", "png", "gif" ]
 
     def __init__(self, redis_conn, output_dir):
         self.redis_conn = redis_conn
