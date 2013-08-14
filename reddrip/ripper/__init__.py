@@ -3,6 +3,8 @@ import logging
 import time
 import re
 import urlparse
+import string
+import random
 
 from redis.exceptions import ResponseError
 import requests
@@ -24,8 +26,15 @@ class Ripper(object):
 
         self.reddit = praw.Reddit(user_agent=self.agent)
 
+    def _random_name(self, size=10, chars=string.ascii_lowercase +
+                                          string.digits):
+        return ''.join(random.choice(chars) for x in range(size))
+
     def _clean_title(self, title):
-        return re.sub(r'([^\s\w]|_)+', '', title)[:128].lower()
+        title = re.sub(r'([^\s\w]|_)+', '', title)[:128].lower()
+        if len(title) < 4:
+            title = self._random_name()
+        return title
 
     def _get_ext(self, url):
         url_info = urlparse.urlparse(url)
