@@ -25,19 +25,6 @@ class StatCommand(Command):
             "--config", "-c", help="configuration file", required=True
         )
 
-    def _human_readable(self, size):
-        size = float(size)
-        sizes = [(1024, "Gb"), (1024, "Mb"), (1024, "Kb"), (1, "b")]
-        divider, suffix = sizes.pop()
-        while size > 1024:
-            try:
-                divider, suffix = sizes.pop()
-                size = round(size / divider, 2)
-            except IndexError:
-                break
-
-        return "%s %s" % (size, suffix)
-
     def execute(self, options):
         conf = Configuration(options.config)
 
@@ -77,13 +64,21 @@ class StatCommand(Command):
             sub_processed = len(
                 redis_conn.smembers("stat:%s:processed:all" % subreddit)
             )
-            sub_saved = redis_conn.get("stat:%s:saved:count" % subreddit)
-            sub_size = redis_conn.get("stat:%s:saved:size" % subreddit)
+            sub_saved = self._get_from_redis(
+                redis_conn, "stat:%s:saved:count" % subreddit
+            )
+            sub_size = self._get_from_redis(
+                redis_conn, "stat:%s:saved:size" % subreddit
+            )
+
             subdir = "%s/%s" % (conf.glob["outdir"], subreddit)
-            sub_existing = len([
-                f for f in os.listdir(subdir)
-                if os.path.isfile("%s/%s" % (subdir, f))
-            ])
+            if os.path.exists(subdir):
+                sub_existing = len([
+                    f for f in os.listdir(subdir)
+                    if os.path.isfile("%s/%s" % (subdir, f))
+                ])
+            else:
+                sub_existing = 0
 
             processed += int(sub_processed)
             saved += int(sub_saved)
@@ -109,3 +104,20 @@ class StatCommand(Command):
         ])
 
         print table.draw()
+
+    def _human_readable(self, size):
+        size = float(size)
+        sizes = [(1024, "Gb"), (1024, "Mb"), (1024, "Kb"), (1, "b")]
+        divider, suffix = sizes.pop()
+        while size > 1024:
+            try:
+                divider, suffix = sizes.pop()
+                size = round(size / divider, 2)
+            except IndexError:
+                break
+
+        return "%s %s" % (size, suffix)
+
+    def _get_from_redis(self, redis, key):
+        value = redis.get(key)
+        return value if value else 0
