@@ -61,9 +61,14 @@ class Ripper(object):
             full_file = "%s/%s_%s.%s" % (subdir, filename, suffix, ext)
             suffix += 1
 
-        r = requests.get(url)
-        with open(full_file, "wb") as output:
-            output.write(r.content)
+        # TODO: implement retrying with incremental backoff.
+        try:
+            r = requests.get(url)
+            with open(full_file, "wb") as output:
+                output.write(r.content)
+            log.info("Saved %s in %s: %s" % (sub_id, subreddit, filename))
+        except requests.exceptions.RequestException:
+            log.debug("Failed to save %s" % sub_id)
 
         # Increment saved number.
         self.redis_conn.incr("stat:%s:saved:count" % subreddit)
@@ -85,7 +90,6 @@ class Ripper(object):
             )
         self.redis_conn.incr("stat:%s:date:%s" % (subreddit, datehour))
 
-        log.info("Saved %s in %s: %s" % (sub_id, subreddit, filename))
         time.sleep(1)
 
     def process(self, sub):
