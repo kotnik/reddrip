@@ -69,6 +69,7 @@ class Ripper(object):
             log.info("Saved %s in %s: %s" % (sub_id, subreddit, filename))
         except requests.exceptions.RequestException:
             log.debug("Failed to save %s" % sub_id)
+            return False
 
         # Increment saved number.
         self.redis_conn.incr("stat:%s:saved:count" % subreddit)
@@ -91,6 +92,8 @@ class Ripper(object):
         self.redis_conn.incr("stat:%s:date:%s" % (subreddit, datehour))
 
         time.sleep(1)
+
+        return True
 
     def process(self, sub):
         log.debug("Processing %s" % sub["name"])
