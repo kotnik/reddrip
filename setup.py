@@ -23,8 +23,11 @@ from setuptools import setup, find_packages
 __VERSION__ = "1.2.0"
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(root_dir, "README.md")) as f:
-    README = f.read()
+readme_file = os.path.join(root_dir, "README.md")
+README = 'Reddrip is Reddit subreddit picture ripper.'
+if os.path.exists(readme_file):
+    with open(readme_file) as f:
+        README = f.read()
 
 setup(name="reddrip",
     version=__VERSION__,
