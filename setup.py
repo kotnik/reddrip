@@ -20,7 +20,7 @@
 import os
 from setuptools import setup, find_packages
 
-__VERSION__ = "1.1.0"
+__VERSION__ = "1.2.0"
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(root_dir, "README.md")) as f:
