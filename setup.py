@@ -20,12 +20,14 @@
 import os
 from setuptools import setup, find_packages
 
+__VERSION__ = "1.1.0"
+
 root_dir = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(root_dir, "README.md")) as f:
     README = f.read()
 
 setup(name="reddrip",
-    version="1.1",
+    version=__VERSION__,
     description="Reddrip is Reddit subreddit picture ripper.",
     long_description=README,
     keywords="reddit crawler",
