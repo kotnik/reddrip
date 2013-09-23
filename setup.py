@@ -20,7 +20,7 @@
 import os
 from setuptools import setup, find_packages
 
-__VERSION__ = "1.2.1"
+__VERSION__ = "1.2.2"
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 readme_file = os.path.join(root_dir, "README.md")
