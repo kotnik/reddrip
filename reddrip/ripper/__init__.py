@@ -112,27 +112,32 @@ class Ripper(object):
         else:
             raise Exception("Unsupported type %s" % sub["type"])
 
-        for submission in submissions:
-            if self._seen(submission.id, sub["name"]):
-                continue
+        try:
+            for submission in submissions:
+                if self._seen(submission.id, sub["name"]):
+                    continue
 
-            self.redis_conn.sadd(
-                "stat:%s:processed:all" % sub["name"], submission.id
+                self.redis_conn.sadd(
+                    "stat:%s:processed:all" % sub["name"], submission.id
+                )
+
+                ext = self._get_ext(submission.url)
+                if ext not in self.supported_exts:
+                    log.debug("Skipped %s, not supported extension in: %s" % (
+                        submission.id, submission.url
+                    ))
+                    continue
+
+                self._save(
+                    sub_id=submission.id,
+                    url=submission.url,
+                    subreddit=sub["name"],
+                    filename=self._clean_title(submission.title),
+                    ext=ext,
+                )
+
+            time.sleep(self.timeout)
+        except requests.exceptions.RequestException as e:
+            log.error(
+                "Failed to fetch subreddit %s with error: %s" % (sub["name"], e)
             )
-
-            ext = self._get_ext(submission.url)
-            if ext not in self.supported_exts:
-                log.debug("Skipped %s, not supported extension in: %s" % (
-                    submission.id, submission.url
-                ))
-                continue
-
-            self._save(
-                sub_id=submission.id,
-                url=submission.url,
-                subreddit=sub["name"],
-                filename=self._clean_title(submission.title),
-                ext=ext,
-            )
-
-        time.sleep(self.timeout)
