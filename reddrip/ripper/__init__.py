@@ -137,7 +137,7 @@ class Ripper(object):
                 )
 
             time.sleep(self.timeout)
-        except requests.exceptions.RequestException as e:
+        except (requests.exceptions.RequestException, praw.errors.HTTPException, praw.errors.Forbidden) as e:
             log.error(
                 "Failed to fetch subreddit %s with error: %s" % (sub["name"], e)
             )
